@@ -38,16 +38,27 @@ def main():
     # Return the light's transform node to move it
     keyLight = cmds.listRelatives(keyLight, parent=True)[0]
     cmds.xform(keyLight, worldSpace=True, translation=[
-        centerX + (maxSize * 0.7), centerY + (maxSize * 0.7),
-        centerZ + (maxSize * 0.7)
+        centerX + (maxSize * 2), centerY + (maxSize * 2),
+        centerZ + (maxSize * 2)
     ])
     cmds.xform(keyLight, worldSpace=True, rotation=[-45, 45, 0])
     # Set to relatively high intensity
     cmds.setAttr(keyLight + ".intensity", 1.5)
     
     # Create/position a fill light positioned at the opposite side
-    
+    fillLight = cmds.directionalLight(name="fillLight")
+    fillLight = cmds.listRelatives(fillLight, parent=True)[0]
+
+    cmds.xform(fillLight, worldSpace=True, translation=[
+        centerX - (maxSize * 2),
+        centerY + (maxSize * 1),
+        centerZ + (maxSize * 2)
+    ])
+
+    # Rotate fill light to object
+    cmds.xform(fillLight, worldSpace=True, rotation=[-20, 135, 0])
     # Set to low intensity
+    cmds.setAttr(fillLight + ".intensity", 0.5)
 
     # **If in our ability**
     # Create a rim light
