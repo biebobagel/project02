@@ -34,9 +34,19 @@ def main():
     cmds.viewPlace(camera, lookAt=[centerX, centerY, centerZ])
 
     # Create a key light positioned at 45 degrees north of camera
+    keyLight = cmds.directionalLight(name="keyLight")
+    # Return the light's transform node to move it
+    keyLight = cmds.listRelatives(keyLight, parent=True)[0]
+    cmds.xform(keyLight, worldSpace=True, translation=[
+        centerX + (maxSize * 0.7), centerY + (maxSize * 0.7),
+        centerZ + (maxSize * 0.7)
+    ])
+    cmds.xform(keyLight, worldSpace=True, rotation=[-45, 45, 0])
     # Set to relatively high intensity
-
+    cmds.setAttr(keyLight + ".intensity", 1.5)
+    
     # Create/position a fill light positioned at the opposite side
+    
     # Set to low intensity
 
     # **If in our ability**
