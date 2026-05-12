@@ -60,9 +60,17 @@ def main():
     # Set to low intensity
     cmds.setAttr(fillLight + ".intensity", 0.5)
 
-    # **If in our ability**
     # Create a rim light
+    rimLight = cmds.directionalLight(name="rimLight")
+    rimLight = cmds.listRelatives(rimLight, parent=True)[0]
     # Position behind the object at low intensity
+    cmds.xform(rimLight, worldSpace=True, translation=[
+        centerX,
+        centerY + (maxSize * 2),
+        centerZ - (maxSize * 3)
+    ])
+    cmds.xform(rimLight, worldSpace=True, rotation=[-10, 180, 0])
+    cmds.setAttr(rimLight + ".intensity", 1.2)
 
     # Create object animation rotating 360 degrees
     # 0-120 frame timeline
