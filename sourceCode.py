@@ -1,23 +1,53 @@
-# Select the object in scene
-    # If there's no object/selection, display warning/stop
+import maya.cmds as cmds
+import maya.OpenMayaUI as omui
 
-# Generate a boudning box of object
-# Return the center point value
-# Calculate object size for light placements
+def main():   
+    # Select the object in scene
+    objectSelection = cmds.ls(selection=True)
+    # If there's no object/selection, display warning/stop 
 
-# Create a camera
-# Position camera based on object size
-# Aim camera at object
+    # Generate a boudning box of object
+    objName = objectSelection[0]
+    boundingBox = cmds.exactWorldBoundingBox(objName)
+    xmin, ymin, zmin, xmax, ymax, zmax = boundingBox
+    # Return the center point value(s)
+    centerX = (xmin + xmax) / 2
+    centerY = (ymin + ymax) / 2
+    centerZ = (zmin + zmax) / 2
+    # Calculate object size for light placements
+    width = xmax - xmin
+    height = ymax - ymin
+    depth = zmax - zmin
 
-# Create a key light positioned at 45 degrees north of camera
-# Set to relatively high intensity
+    maxSize = max(width, height, depth)
 
-# Create/position a fill light positioned at the opposite side
-# Set to low intensity
+    # Create a camera and make sure you don't have two
+    if cmds.objExists("turntableCamera"):
+        cmds.delete("turntableCamera")
 
-# **If in our ability**
-# Create a rim light
-# Position behind the object at low intensity
+    camera, cameraShape = cmds.camera(name="turntableCamera")
+    # Position camera based on object size
+    cmds.xform(camera, worldSpace=True, translation=[
+        centerX, centerY + maxSize, centerZ + (maxSize * 3)
+    ])
+    # Aim camera at object
+    cmds.viewPlace(camera, lookAt=[centerX, centerY, centerZ])
 
-# Create object animation rotating 360 degrees
-# 0-120 frame timeline
+    # Create a key light positioned at 45 degrees north of camera
+    # Set to relatively high intensity
+
+    # Create/position a fill light positioned at the opposite side
+    # Set to low intensity
+
+    # **If in our ability**
+    # Create a rim light
+    # Position behind the object at low intensity
+
+    # Create object animation rotating 360 degrees
+    # 0-120 frame timeline
+
+
+    print("Running tool")
+
+if __name__ == "__main__":
+    main()
