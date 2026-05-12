@@ -1,6 +1,21 @@
 import maya.cmds as cmds
 import maya.OpenMayaUI as omui
 
+def createTurntable(objName):
+    # Set time range
+    startFrame = 1
+    endFrame = 120
+
+    # Object is at start
+    cmds.setKeyframe(objName, attribute="rotateY", value=0, time=startFrame)
+
+    # Initiate full rotation
+    cmds.setKeyframe(objName, attribute="rotateY", value=360, time=endFrame)
+
+    # Make sure motion is linear and "readable"
+    cmds.selectKey(objName, attribute="rotateY")
+    cmds.keyTangent(inTangentType="linear", outTangentType="linear")
+
 def main():   
     # Select the object in scene
     objectSelection = cmds.ls(selection=True)
@@ -74,6 +89,7 @@ def main():
 
     # Create object animation rotating 360 degrees
     # 0-120 frame timeline
+    createTurntable(objName)
 
 
     print("Running tool")
